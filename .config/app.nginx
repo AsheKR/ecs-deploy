@@ -1,0 +1,14 @@
+server {
+    listen 80 default_server;
+    charset utf-8;
+    client_max_body_size 128M;
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/tmp/gunicorn.sock;
+    }
+
+    location /static/ {
+        alias /srv/projects/.static/;
+    }
+}

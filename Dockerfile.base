@@ -1,0 +1,17 @@
+FROM                        python:3.6.7-slim
+MAINTAINER                  teachmesomething2580@gmail.com
+
+ENV                         DJANGO_SETTINGS_MODULE  config.settings.production
+ENV                         LANG                    C.UTF-8
+ENV                         LC_ALL                  C.UTF-8
+
+RUN                         apt -y update
+RUN                         apt -y dist-upgrade
+RUN                         apt -y install supervisor nginx && \
+                            pip3 install gunicorn && \
+                            pip3 install pipenv
+
+COPY                        Pipfile /tmp/Pipfile
+COPY                        Pipfile.lock /tmp/Pipfile.lock
+WORKDIR                     /tmp/
+RUN                         pipenv install --system --ignore-pipfile
