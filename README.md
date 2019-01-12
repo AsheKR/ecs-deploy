@@ -5,10 +5,13 @@
 ## 환경 소개
 
 ECR에 Docker Image를 올린 후, ECS에서 ECR에 올린 이미지를 가지고 서비스를 실행한다.
+
 Travis CI를 이용하여 `master` 브랜치에 PUSH가 발생하면 자동으로 테스트,배포가 이루어지게한다.
+
 또한 서비스의 중단 없이 지속적인 배포를 위해 `BlueGreenDeployment`을 사용한다.
 
 시스템 구성은 Nginx + Gunicorn + Django 를 사용한다.
+
 
 ## 기본 환경 세팅
 
