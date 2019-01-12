@@ -99,25 +99,25 @@ script:
 
 Github을 통해 로그인하고나서 오른쪽 위 프로필을 클릭하면 다음과 같은 화면이 나온다.
 
-![Travis 1](images/deploy 003.jpg)
+![Travis 1](images/deploy_003.jpg)
 
 자신의 프로젝트를 검색 후 활성화버튼을 누른다. (무언가 경고창이 뜬다면 하라는대로 허용하면 된다.)
 
-![Travis 1](images/deploy 005.jpg)
+![Travis 1](images/deploy_005.jpg)
 
 그 후 master 브랜치에 git push 명령을 수행하고나면 아래와같은 화면처럼 자동적으로 travis에서 감지하고 실행하게된다.
 
-![Travis 1](images/deploy 006.jpg)
+![Travis 1](images/deploy_006.jpg)
 
 물론, 실패한다.
 
-![Travis 1](images/deploy 007.jpg)
+![Travis 1](images/deploy_007.jpg)
 
 Build HIstory - #1 errored 부분을 클릭하면 세부사항을 볼 수 있다.
 
 세부사항에 들어가서 아래로 내리면 `Job log`탭이 보이고, `Job log`가 활성화된 상태로 아래로 내리면 오류가 발생한 지점을 찾을 수 있다.
 
-![Travis 1](images/deploy 008.jpg)
+![Travis 1](images/deploy_008.jpg)
 
 당연히 중요한 정보인 `.secrets/`는 포함되면 안되므로 이 에러가 발생하는 것은 당연하다!
 
@@ -163,11 +163,11 @@ before_install:
 
 Travis 홈페이지로 와서 하나의 진행중인 프로젝트를 누르고 오른쪽 상단의 More options - Settings 를 클릭한다.
 
-![Travis 1](images/deploy 009.jpg)
+![Travis 1](images/deploy_009.jpg)
 
 아래로 내리다보면 `Environment Variables`란에 2개의 Key, Value가 추가된것을 확인할 수 있다.
 
-![Travis 1](images/deploy 010.jpg)
+![Travis 1](images/deploy_010.jpg)
 
 Travis CI에 볼 수 없는 환경변수를 사용하고 PUSH가 일어났을 때 그 환경변수를 가져와 `secrets.tar.enc`를 복호화한다.
 
@@ -175,7 +175,7 @@ Travis CI에 볼 수 없는 환경변수를 사용하고 PUSH가 일어났을 �
 
 DEV 환경에서 실행을 확인하기위해`DJANGO_SETTINGS_MODULE`을 `config.settings.dev`도 추가한다.
 
-![Travis 1](images/deploy 011.jpg)
+![Travis 1](images/deploy_011.jpg)
 
 
 
@@ -192,7 +192,7 @@ before_install:
 
 아래와 같이 성공해야한다.
 
-![Travis 1](images/deploy 012.jpg)
+![Travis 1](images/deploy_012.jpg)
 
 
 
@@ -206,11 +206,11 @@ before_install:
 
 1. IAM으로 이동하고 사용자 추가를 누른다. (이름 자유, 프로그래밍 방식 액세스)
 
-![Travis 1](images/deploy 013.jpg)
+![Travis 1](images/deploy_013.jpg)
 
 2. 권한에서 아래 두가지 권한을 필터 후 체크한다.
 
-![Travis 1](images/deploy 015.jpg)
+![Travis 1](images/deploy_015.jpg)
 
 `AmazoneEC2ContainerRegisterFullAccess`
 
@@ -220,13 +220,13 @@ before_install:
 
 다음으로 넘기다보면 확인할 수 있는 창
 
-![Travis 1](images/deploy 014.jpg)
+![Travis 1](images/deploy_014.jpg)
 
 
 
 3. 두가지를 선택 후 액세스키가 보이는 창까지 넘어온다.
 
-![Travis 1](images/deploy 016.jpg)
+![Travis 1](images/deploy_016.jpg)
 
 여기서 잠깐! 창을 끄지않고 놔둔 후 로컬 환경으로 돌아가 aws 설정을 완료한다.
 
@@ -251,19 +251,19 @@ $ Default output format [None]: json
 
 ECR로 온 후 레포지토리 생성을 클릭한다.
 
-![Travis 1](images/deploy 001.jpg)
+![Travis 1](images/deploy_001.jpg)
 
 이름은 자유로히
 
-![Travis 1](images/deploy 002.jpg)
+![Travis 1](images/deploy_002.jpg)
 
 
 
 생성 후 생성된 레포지토리를 클릭 후 우측 상단의 푸시 명령을 확인한다.
 
-![Travis 1](images/deploy 017.jpg)
+![Travis 1](images/deploy_017.jpg)
 
-![Travis 1](images/deploy 018.jpg)
+![Travis 1](images/deploy_018.jpg)
 
 
 
@@ -295,7 +295,7 @@ $ sudo docker push <복사하여 가져온 리포지토리>/ecs-deploy:latest
 
 모두 완료되었다면 레포지토리를 클릭했을 때 모든 태그가 존재해야한다.
 
-![Travis 1](images/deploy 020.jpg)
+![Travis 1](images/deploy_020.jpg)
 
 
 
@@ -349,7 +349,7 @@ Elastic Container Service 라는 서비스 이름에서 알 수 있듯이 이 �
 
 `Task definition` 혹은 `작업 정의` 메뉴로 이동한다.
 
-![Travis 1](images/deploy 021.jpg)
+![Travis 1](images/deploy_021.jpg)
 
 1. 새 작업 정의 생성
 2. EC2 선택
@@ -362,7 +362,7 @@ Elastic Container Service 라는 서비스 이름에서 알 수 있듯이 이 �
   - 컨테이너 이름
   - 이미지 (ECR의 latest Image URL을 복사하여 붙여넣는다.)
 
-  ![Travis 1](images/deploy 022.jpg)
+  ![Travis 1](images/deploy_022.jpg)
 
   - 메모리 제한 (하드 제한 - 256)
 
@@ -393,7 +393,7 @@ Elastic Container Service 라는 서비스 이름에서 알 수 있듯이 이 �
 
 생성을 누르면 자동으로 설정들이 생성된다. 과정이 모두 완료될 때 까지 기다린다.
 
-![Travis 1](images/deploy 023.jpg)
+![Travis 1](images/deploy_023.jpg)
 
 
 
@@ -435,7 +435,7 @@ EC2 서비스의 왼쪽 메뉴의 로드밸런서로 온다.
 - 이름: <자유>
 - __가용 영역__ - VPC를 반드시이전에 생성한 것으로 설정해야한다!!! 가용 영역 두개 모두 클릭
 
-![Travis 1](images/deploy 024.jpg)
+![Travis 1](images/deploy_024.jpg)
 
 ##### 보안 설정 구성
 
@@ -445,13 +445,13 @@ EC2 서비스의 왼쪽 메뉴의 로드밸런서로 온다.
 
 기존 보안 그룹중 `EC2ContainerService-ecs-deploy-clust... ` 자동생성된 보안 그룹을 선택한다.
 
-![Travis 1](images/deploy 026.jpg)
+![Travis 1](images/deploy_026.jpg)
 
 ##### 라우팅 구성
 
 - 이름: <자유>
 
-![Travis 1](images/deploy 027.jpg)
+![Travis 1](images/deploy_027.jpg)
 
 ##### 대상 등록
 
@@ -467,7 +467,7 @@ EC2 서비스의 왼쪽 메뉴의 로드밸런서로 온다.
 
 Dynamic Port는 기본적으로 `32768~65535` 사이로 생성해주므로 해당 포트를 모두 허용해준다.
 
-![Travis 1](images/deploy 028.jpg)
+![Travis 1](images/deploy_028.jpg)
 
 
 
@@ -478,7 +478,7 @@ ELB 이름을 새로고침하면 위에서 만든 로드밸런서의 이름을 �
 - 로드를 밸런싱할 컨테이너 - 대상 그룹 이름에서 위의 `라우팅 구성`에서 생성한 이름을 선택할 수 있다.
 - 서비스 검색 (선택사항) - 비활성화
 
-![Travis 1](images/deploy 029.jpg)
+![Travis 1](images/deploy_029.jpg)
 
 
 
@@ -496,9 +496,9 @@ ELB 이름을 새로고침하면 위에서 만든 로드밸런서의 이름을 �
 
 서비스란과 작업란을 보면 우리가 등록한 것들이 잘 실행되고 있다.
 
-![Travis 1](images/deploy 030.jpg)
+![Travis 1](images/deploy_030.jpg)
 
-![Travis 1](images/deploy 031.jpg)
+![Travis 1](images/deploy_031.jpg)
 
 
 
@@ -512,11 +512,11 @@ EC2 - 대상 그룹 - 대상 탭을 눌러본다.
 
 AWS Service는 해당 서비스가 제대로 동작하는지 HealtCheck를 통해 해당 서비스가 살았는지 죽었는지 확인한다.  `/`로 요청했을 때 200번의 응답이 와야한다. 
 
-![Travis 1](images/deploy 032.jpg)
+![Travis 1](images/deploy_032.jpg)
 
 하지면 현재는 `/`에는 아무것도 없으므로 400번의 응답을 반환한다. 그러므로 ECS는 오류를 인지하고 작업을 삭제하고 새 작업을 올리게된다.
 
-![Travis 1](images/deploy 033.jpg)
+![Travis 1](images/deploy_033.jpg)
 
 
 
@@ -560,7 +560,7 @@ except requests.exceptions.RequestException:
 
 왜냐하면 Production 환경에서 `/`에 접근하면 404페이지가 나오기 때문이다.
 
-![Travis 1](images/deploy 034.jpg)
+![Travis 1](images/deploy_034.jpg)
 
 
 
@@ -568,15 +568,15 @@ except requests.exceptions.RequestException:
 
 EC2 - 대상 그룹 - 대상 그룹 선택 - 상태 검사 - 상태검사 편집
 
-![Travis 1](images/deploy 035.jpg)
+![Travis 1](images/deploy_035.jpg)
 
 `/admin`페이지로의 접근은 가능하기 때문에 임시방편으로 그렇게 설정해놓았다. 성공 코드는 `301`
 
-![Travis 1](images/deploy 037.jpg)
+![Travis 1](images/deploy_037.jpg)
 
 다시 작업을 중지하고 대상 그룹에서 기다리다가 healthy가 뜨는 것을 확인한다.
 
-![Travis 1](images/deploy 038.jpg)
+![Travis 1](images/deploy_038.jpg)
 
 
 
@@ -586,13 +586,13 @@ EC2 - 대상 그룹 - 대상 그룹 선택 - 상태 검사 - 상태검사 편집
 
 EC2 - 로드밸런서 - 로드밸런서 선택 - 설명란의 DNS이름을 복사 후 URL로 접속해본다.
 
-![Travis 1](images/deploy 039.jpg)
+![Travis 1](images/deploy_039.jpg)
 
 
 
 Admin 페이지로 도착했을 때 모든게 잘 동작한다!
 
-![Travis 1](images/deploy 040.jpg)
+![Travis 1](images/deploy_040.jpg)
 
 
 
@@ -719,13 +719,13 @@ REMOTE_IMAGE_URL : 뒤의 tag(latest, base)를 뺀 URL
 
 아래와 같이 설정되었는지 확인하자.
 
-![Travis 1](images/deploy 041.jpg)
+![Travis 1](images/deploy_041.jpg)
 
 
 
 이후 다시 git push를 했을 때 ECR에 새 Image가 들어온지 확인한다. 같은 태그가 있을경우 최신 것이 태그가 반영되고 기존의 것은 \<untagged\>로 바뀌게된다.
 
-![Travis 1](images/deploy 042.jpg)
+![Travis 1](images/deploy_042.jpg)
 
 
 
@@ -764,11 +764,11 @@ SERVICE_NAME
 
 사용중인 IAM을 선택 후 인라인 정책을 선택
 
-![Travis 1](images/deploy 043.jpg)
+![Travis 1](images/deploy_043.jpg)
 
 JSON을 클릭
 
-![Travis 1](images/deploy 044.jpg)
+![Travis 1](images/deploy_044.jpg)
 
 아래 내용을 붙여넣고 정책 검토
 
@@ -797,11 +797,11 @@ JSON을 클릭
 }
 ```
 
-![Travis 1](images/deploy 045.jpg)
+![Travis 1](images/deploy_045.jpg)
 
 이름을 생성하고 정책 생성
 
-![Travis 1](images/deploy 046.jpg)
+![Travis 1](images/deploy_046.jpg)
 
 
 
@@ -809,7 +809,7 @@ JSON을 클릭
 
 그 후 git push를 실행하면 마지막에 다음과 같이 나오고, 서버가 꺼지는일 없이 새로운 환경이 배포된다.
 
-![Travis 1](images/deploy 047.jpg)
+![Travis 1](images/deploy_047.jpg)
 
 
 
@@ -826,15 +826,15 @@ JSON을 클릭
 
 1. Task Revision을 생성한다.
 
-![Travis 1](images/deploy 049.jpg)
+![Travis 1](images/deploy_049.jpg)
 
 Revision은 특정 버전에 대한 갱신 작업 또는 결과물을 뜻한다. [여기서 참고함](http://ecampus.keris.or.kr/cyber/9/CD2/lecture_23/2301_p1.htm) 맞는것 같기도 하고 아닌것 같기도 하고..?
 
 2. 해당 Task를 기존에 동작하던 Cluster에서 실행시킨다.
 
-![Travis 1](images/deploy 050.jpg)
+![Travis 1](images/deploy_050.jpg)
 
-![Travis 1](images/deploy 051.jpg)
+![Travis 1](images/deploy_051.jpg)
 
 여기서 Service를 생성할 때 Task Placement 선택에 따라 동작이 다른데, 기본적으로 `AZ Balanced Spread`이다. 즉, 여러개의 Task가 있다면 요청에 대하여 번갈아가며 처리하는 방식이다.
 
