@@ -1,11 +1,13 @@
 sudo: required
-
 language: python
 python:
-  - 3.6.6
-
+- 3.6.6
 install:
-  - pip install pipenv
-  - pipenv install --system --ignore-pipfile
+- pip install pipenv
+- pipenv install --system --ignore-pipfile
 script:
-  - python app/manage.py test
+- python app/manage.py test
+before_install:
+- openssl aes-256-cbc -K $encrypted_2ca9d583100c_key -iv $encrypted_2ca9d583100c_iv
+  -in secrets.tar.enc -out secrets.tar -d
+- tar -xvf secrets.tar
