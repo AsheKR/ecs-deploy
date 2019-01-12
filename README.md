@@ -99,7 +99,7 @@ script:
 
 Github을 통해 로그인하고나서 오른쪽 위 프로필을 클릭하면 다음과 같은 화면이 나온다.
 
-![Travis 1](images/deploy 003.jpg)
+![Travis 1](images/deploy-003.jpg)
 
 자신의 프로젝트를 검색 후 활성화버튼을 누른다. (무언가 경고창이 뜬다면 하라는대로 허용하면 된다.)
 
