@@ -85,7 +85,7 @@ sudo: required
 language: python
 python:
   - 3.6.6
-	
+  
 install:
   - pip install pipenv
   - pip install --system --ignore-pipfile
