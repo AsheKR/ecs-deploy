@@ -1,13 +1,29 @@
 sudo: required
+
+services:
+  - docker
+
 language: python
 python:
-- 3.6.6
+  - 3.6.6
+
 install:
-- pip install pipenv
-- pipenv install --system --ignore-pipfile
+  - pip install pipenv
+  - pipenv install --system --ignore-pipfile
+  - pipenv install awscli --system --ignore-pipfile
+  - sudo apt-get install jq
+  - curl https://raw.githubusercontent.com/silinternational/ecs-deploy/master/ecs-deploy | sudo tee /usr/bin/ecs-deploy
+  - sudo chmod +x /usr/bin/ecs-deploy
+
 script:
-- python app/manage.py test
+  - python app/manage.py test
+
 before_install:
-- openssl aes-256-cbc -K $encrypted_2ca9d583100c_key -iv $encrypted_2ca9d583100c_iv
-  -in secrets.tar.enc -out secrets.tar -d
-- tar -xvf secrets.tar
+  - openssl aes-256-cbc -K $encrypted_2ca9d583100c_key -iv $encrypted_2ca9d583100c_iv
+    -in secrets.tar.enc -out secrets.tar -d
+  - tar -xvf secrets.tar
+
+after_success:
+  - bash .bin/ecr_credentials.sh
+  - bash .bin/docker_push.sh
+  - bash .bin/ecs_deploy.sh
