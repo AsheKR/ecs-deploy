@@ -800,7 +800,10 @@ if [ -z "$TRAVIS_PULL_REQUEST" ] || [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
 if [ "$TRAVIS_BRANCH" == "master" ]; then
 
 echo "Deploying $TRAVIS_BRANCH on $CLUSTER_NAME"
+# ECR 사용했을 시 (선택 1)
 ecs-deploy -c $CLUSTER_NAME -n $SERVICE_NAME -i $REMOTE_IMAGE_URL:latest
+# Docker Hub 사용했을 시 (선택 2)
+ecs-deploy -c $CLUSTER_NAME -n $SERVICE_NAME -i $IMAGE_NAME:latest
 
 else
 echo "Skipping deploy because it's not an allowed branch"
