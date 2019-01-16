@@ -50,6 +50,7 @@ $ mkdir .secrets .bin
   }
 }
 
+# 시크릿키는 생성하여 사용하는걸 권장한다. `Django SecretKey Generator`라고 구글에 검색하면 최상단에 나온다.
 # .secrets/secret.json
 {
   "SECRET_KEY": "4e+n)vnn_z)&r9%&4lh#+omtgkq7#v&de3rh)n#ky*p(#gp8mz"
