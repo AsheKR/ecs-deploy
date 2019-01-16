@@ -1,4 +1,4 @@
-# ECS, ECR, Travis CI를 이용하여 CI/CD 배포 환경 만들기
+# ECS, ECR(혹은 Docker Hub), Travis CI를 이용하여 CI/CD 배포 환경 만들기
 
 
 
@@ -66,11 +66,15 @@ $ mkdir .secrets .bin
 
 ### 자신의 레포지토리로 연결하기
 `git remote -v` 했을 때 ecs-deploy로 origin이 연결되어있다. 이를 자신의 레포지토리로 변경하기 위해 자신의 새 레포지토리를 생성한다.
+
 그 후 origin remote 를 삭제하고 자신의 레포지토리로 연결한다.
+
 `git remote remove origin`
+
 `git remote add origin <자신의 레포지토리 링크>`
 
 __현재 브랜치가 `before_deploy`임을 주의하자!__
+
 `git checkout -b master`를 통해 브랜치를 바꾸어주고 푸쉬하도록한다.
 
 
@@ -207,7 +211,7 @@ before_install:
 
 
 
-## ECR과 연동
+## ECR과 연동 (선택 1)
 
 우선 awscli로 ecr에 이미지를 업로드하기위한 유저를 생성해야한다.
 
@@ -293,22 +297,41 @@ $ sudo $(aws ecr get-login --no-include-email --region ap-northeast-2)
 2. 로컬에 Dockerfile을 빌드, ECR로 푸시
 
 제공된 환경에서는 `Dockerfile`과 `Dockerfile.base`를 나누어 관리하고 있으므로 `Dockerfile.base`를 우선 빌드, 푸시 후 `Dockerfile`을 빌드, 푸시하여야한다.
-여기서 `Dockerfile`의 `FROM <이름>:base`을 자신의 ECR의 레포지토리 이름으로 고쳐주어야한다.
+여기서 `Dockerfile`의 `FROM <이미지 이름>:base`을 자신의 ECR의 레포지토리 이름으로 고쳐주어야한다.
 
 ```bash
 $ sudo docker build -t ecs-deploy:base -f Dockerfile.base .
-$ sudo docker tag ecs-deploy:base <복사하여 가져온 리포지토리>/ecs-deploy:base
-$ sudo docker push <복사하여 가져온 리포지토리>/ecs-deploy:base
+$ sudo docker tag ecs-deploy:base <복사하여 가져온 리포지토리>/<프로젝트 이름>:base
+$ sudo docker push <복사하여 가져온 리포지토리>/<프로젝트 이름>:base
 
 $ sudo docker build -t ecs-deploy .
-$ sudo docker tag ecs-deploy:latest <복사하여 가져온 리포지토리>/ecs-deploy:latest
-$ sudo docker push <복사하여 가져온 리포지토리>/ecs-deploy:latest
+$ sudo docker tag ecs-deploy:latest <복사하여 가져온 리포지토리>/<프로젝트 이름>:latest
+$ sudo docker push <복사하여 가져온 리포지토리>/<프로젝트 이름>:latest
 ```
 
 모두 완료되었다면 레포지토리를 클릭했을 때 모든 태그가 존재해야한다.
 
 ![Travis 1](images/deploy_020.jpg)
 
+
+## Docker Hub (선택 2)
+
+1. Docker Hub의 레포지토리 생성
+
+2. docker hub login
+
+```bash
+$ sudo docker login
+```
+
+3. 로컬 빌드, Push
+
+```bash
+$ docker build -t <프로젝트 이름>:base -f Dockerfile.base .
+$ docker push "<프로젝트 이름>:base"
+$ docker build -t <프로젝트 이름> .
+$ docker push "<프로젝트 이름>:latest"
+```
 
 
 ## ECS 생성
@@ -372,7 +395,7 @@ Elastic Container Service 라는 서비스 이름에서 알 수 있듯이 이 �
 - 컨테이너 정의 - 컨테이너 추가
 
   - 컨테이너 이름
-  - 이미지 (ECR의 latest Image URL을 복사하여 붙여넣는다.)
+  - 이미지 (ECR의 latest Image URL을 복사하여 붙여넣는다. 만약 Docker hub를 사용하였으면 `<도커허브 아이디>/<프로젝트 이름>` 를 적는다..)
 
   ![Travis 1](images/deploy_022.jpg)
 
@@ -673,6 +696,8 @@ Travis CI에 등록한 환경변수를 가져와 credentials를 생성하게 한
 
 
 
+### ECR을 사용하였을 때 (선택 1)
+
 `docker_push.sh`
 
 ```shell
@@ -703,6 +728,32 @@ fi
 
 ```
 
+### DockerHub를 사용했을 때 (선택 2)
+
+`docker_push.sh`
+
+```shell
+#! /bin/bash
+# GitHub에서 발생한 WebHook이 PUSH일 경우만 실행하도록한다.
+if [ -z "$TRAVIS_PULL_REQUEST" ] || [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+# master 브랜치일경우만 push가 실행되도록한다.
+if [ "$TRAVIS_BRANCH" == "master" ]; then
+
+docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+
+# Build and push
+docker build -t $IMAGE_NAME:base -f Dockerfile.base .
+docker push "$IMAGE_NAME:base"
+docker build -t $IMAGE_NAME .
+docker push "$IMAGE_NAME:latest"
+
+else
+echo "Skipping deploy because branch is not 'master'"
+fi
+else
+echo "Skipping deploy because it's a pull request"
+fi
+```
 
 
 `TRAVIS_`로 시작하는 환경변수는 자동으로 만들어지는 변수로 사용된다. 그러므로 직접 정의해줄 필요는 없다.
@@ -712,8 +763,14 @@ fi
 ```text
 AWS_ACCESS_KEY : 말 그대로
 AWS_SECRET_ACCESS_KEY : 말 그대로
-IMAGE_NAME : ECR 리포지토리 이름 (여기서 작성중인 이름은 ecs-deploy)
+IMAGE_NAME : 리포지토리 이름
+
+# ECR이 사용될 때 (선택 1)
 REMOTE_IMAGE_URL : 뒤의 tag(latest, base)를 뺀 URL
+
+# DockerHub가 사용될 때 (선택 2)
+DOCKER_USERNAME
+DOCKER_PASSWORD
 ```
 
 이들을 Travis CI의 Environment Variables에 추가하도록하자.
