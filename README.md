@@ -627,8 +627,8 @@ install:
 - pip install pipenv
 - pipenv install --system --ignore-pipfile
 # == 추가되는 부분 ==
-- pipenv install awscli --system --ignore-pipfile
 # Blue/Green Deploy를 위한 ecs-deploy 명령을 사용하기 위해 설치
+- pipenv install awscli --system --ignore-pipfile
 - sudo apt-get -y install jq
 - curl https://raw.githubusercontent.com/silinternational/ecs-deploy/master/ecs-deploy | sudo tee /usr/bin/ecs-deploy
 - sudo chmod +x /usr/bin/ecs-deploy
