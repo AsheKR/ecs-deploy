@@ -293,6 +293,7 @@ $ sudo $(aws ecr get-login --no-include-email --region ap-northeast-2)
 2. 로컬에 Dockerfile을 빌드, ECR로 푸시
 
 제공된 환경에서는 `Dockerfile`과 `Dockerfile.base`를 나누어 관리하고 있으므로 `Dockerfile.base`를 우선 빌드, 푸시 후 `Dockerfile`을 빌드, 푸시하여야한다.
+여기서 `Dockerfile`의 `FROM <이름>:base`을 자신의 ECR의 레포지토리 이름으로 고쳐주어야한다.
 
 ```bash
 $ sudo docker build -t ecs-deploy:base -f Dockerfile.base .
