@@ -87,7 +87,7 @@ python:
   
 install:
   - pip install pipenv
-  - pip install --system --ignore-pipfile
+  - pipenv install --system --ignore-pipfile
 script:
   -python app/manage.py test
 ```
