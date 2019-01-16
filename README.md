@@ -610,47 +610,37 @@ Admin 페이지로 도착했을 때 모든게 잘 동작한다!
 
 ## Travis ci 를 사용하여 ECR, ECS Blue/Green Deploy하기
 
+before_install 부분 이외에 모두 추가 혹은 수정하도록하자.
 ```yaml
 sudo: required
 
-# == 추가되는 부분 ==
 services:
-- docker
-# == end ==
+  - docker
 
 language: python
-
 python:
-- 3.6.6
+  - 3.6.6
 
 install:
-- pip install pipenv
-- pipenv install --system --ignore-pipfile
-# == 추가되는 부분 ==
-# Blue/Green Deploy를 위한 ecs-deploy 명령을 사용하기 위해 설치
-- pipenv install awscli --system --ignore-pipfile
-- sudo apt-get -y install jq
-- curl https://raw.githubusercontent.com/silinternational/ecs-deploy/master/ecs-deploy | sudo tee /usr/bin/ecs-deploy
-- sudo chmod +x /usr/bin/ecs-deploy
-## == end ==
+  - pip install pipenv
+  - pipenv install --system --ignore-pipfile
+  - pipenv install awscli --system --ignore-pipfile
+  - sudo apt-get install jq
+  - curl https://raw.githubusercontent.com/silinternational/ecs-deploy/master/ecs-deploy | sudo tee /usr/bin/ecs-deploy
+  - sudo chmod +x /usr/bin/ecs-deploy
 
 script:
-- python app/manage.py test
+  - python app/manage.py test
 
 before_install:
-- openssl aes-256-cbc -K $encrypted_2ca9d583100c_key -iv $encrypted_2ca9d583100c_iv
-  -in secrets.tar.enc -out secrets.tar -d
-- tar -xvf secrets.tar
+  - openssl aes-256-cbc -K $encrypted_3a3073cf4f6a_key -iv $encrypted_3a3073cf4f6a_iv
+    -in secrets.tar.enc -out secrets.tar -d
+  - tar -xvf secrets.tar
 
-# == 추가되는 부분 ==
 after_success:
-# awscli를 사용하기위해 config, credentials를 추가하는 명령
-- bash .bin/ecr_credentials.sh
-# ECR로 배포하는 명령
-- bash .bin/docker_push.sh
-# Blue/Green Deploy를 수행하는 명령
-- bash .bin/ecs_deploy.sh
-# == end ==
+  - bash .bin/ecr_credentials.sh
+  - bash .bin/docker_push.sh
+  - bash .bin/ecs_deploy.sh
 ```
 
 
