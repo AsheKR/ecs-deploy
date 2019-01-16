@@ -58,6 +58,9 @@ $ mkdir .secrets .bin
 
 3. `nginx, gunicorn, supervisord`설정을 담은 `.config` 폴더
 
+### 확인법
+`export DJANGO_SETTINGS_MODULE=config.settings.dev`
+`python app/manage.py runserver`를 실행했을 때 정상적으로 동작하면 된다.
 
 
 이후 자신의 Git 레포지토리에 연결하여 `master` 브랜치로 변경 후 PUSH까지 작업한다.
