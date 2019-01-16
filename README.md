@@ -63,8 +63,14 @@ $ mkdir .secrets .bin
 `python app/manage.py runserver`를 실행했을 때 정상적으로 동작하면 된다.
 
 
-이후 자신의 Git 레포지토리에 연결하여 `master` 브랜치로 변경 후 PUSH까지 작업한다.
+### 자신의 레포지토리로 연결하기
+`git remote -v` 했을 때 ecs-deploy로 origin이 연결되어있다. 이를 자신의 레포지토리로 변경하기 위해 자신의 새 레포지토리를 생성한다.
+그 후 origin remote 를 삭제하고 자신의 레포지토리로 연결한다.
+`git remote remove origin`
+`git remote add origin <자신의 레포지토리 링크>`
 
+__현재 브랜치가 `before_deploy`임을 주의하자!__
+`git checkout -b master`를 통해 브랜치를 바꾸어주고 푸쉬하도록한다.
 
 
 ## Travis CI와 연결
