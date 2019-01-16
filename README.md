@@ -23,14 +23,12 @@ $ git init
 # 가상환경 세팅, PIPENV를 사용하였다
 $ pipenv --python 3.6.6
 $ pipenv shell
-$ pipenv install django
-
-# 필요한 폴더들을 생성
-$ mkdir .bin  # 명령 스크립트들을 담은 폴더
-$ mkdir .config  # nginx, supervisord, gunicorn 설정이 들어있을 폴더
-$ mkdir .secrets  # 프로젝트에 포함되면 안되는 중요한 정보들을 담음
 
 # 작성자의 레포지토리의 before_deploy 브랜치를 클론하여 사용한다.
+# 클론 후
+
+$ pipenv install --dev
+$ mkdir .secrets .bin
 ```
 
 
