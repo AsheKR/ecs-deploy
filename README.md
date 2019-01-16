@@ -16,18 +16,12 @@ Travis CI를 이용하여 `master` 브랜치에 PUSH가 발생하면 자동으�
 ## 기본 환경 세팅
 
 ```bash
-$ mkdir ecs-deploy
-$ git init
-# .gitignore 맘껏 생성 [반드시 ".secrets/" 는 gitignore에 포함하여야한다!]
-
-# 가상환경 세팅, PIPENV를 사용하였다
-$ pipenv --python 3.6.6
-$ pipenv shell
-
 # 작성자의 레포지토리의 before_deploy 브랜치를 클론하여 사용한다.
-# 클론 후
+$ git clone --branch before_deploy https://github.com/teachmesomething2580/ecs-deploy.git <프로젝트 이름>
 
+$ pipenv --python 3.6.6
 $ pipenv install --dev
+
 $ mkdir .secrets .bin
 ```
 
