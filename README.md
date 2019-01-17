@@ -143,8 +143,7 @@ Build HIstory - #1 errored 부분을 클릭하면 세부사항을 볼 수 있다
 `$ travis login`
 
 3-1. travis 가 찾을 수 없다고 나온다면?
-travis를 설치할 때 다음과 같은 문구를 확인했을 것이다. PATH 환경변수에 gem으로 설치된 프로그램 폴더가 없기 때문에 명령어를 찾지 못하는 것이다.
-FULL PATH 를 사용하여 travis를 실행하도록 하자.
+travis를 설치할 때 다음과 같은 문구를 확인했을 것이다. 
 ```bash
 WARNING:  You don't have /home/m41d/.gem/ruby/2.5.0/bin in your PATH,
           gem executables will not run.
@@ -153,6 +152,8 @@ Parsing documentation for travis-1.8.9
 Done installing documentation for travis after 1 seconds
 1 gem installed
 ```
+PATH 환경변수에 gem으로 설치된 프로그램 폴더가 없기 때문에 명령어를 찾지 못하는 것이다.
+FULL PATH 를 사용하여 travis를 실행하도록 하자.
 
 4. 암호화
 
