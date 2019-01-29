@@ -911,3 +911,41 @@ Revision은 특정 버전에 대한 갱신 작업 또는 결과물을 뜻한다.
 ## 기타
 
 이대로 사용할거면 Branch 전략은 `Github flow`가 좋다고 생각한다.
+
+## 참고 사이트
+
+### ECS, ECR 사용
+[https://blog.appkr.kr/work-n-play/deploy-with-ecs/]
+ECS TASK 생성
+ECS CLUSTER 생성
+
+<ssh -i ~/.ssh/<KeyName> ec2-user@<public dns>>
+KEY 오류는 `ec2-user@<public dns>`를 입력하고 들어가야 됨
+cluster, loadbalancer VPC 그룹은 반드시 같게!!
+
+### ECS, ECR, Jenkins 모두 이용 (컨테이너 2개이용하는 방법)
+https://docs.aws.amazon.com/ko_kr/AWSGettingStartedContinuousDeliveryPipeline/latest/GettingStarted/CICD_Jenkins_Pipeline.html
+
+### health check
+```
+ALLOWED_HOSTS = [
+    '.amazonaws.com',
+]
+
+try:
+    EC2_IP = requests.get('http://169.254.169.254/latest/meta-data/local-ipv4').text
+    ALLOWED_HOSTS.append(EC2_IP)
+except requests.exceptions.RequestException:
+    pass
+```
+
+### 여러 Task를 올리기위한 Dynamic Port mapping
+
+#### 작업 정의시 0-80을 사용하라
+https://aws.amazon.com/ko/premiumsupport/knowledge-center/dynamic-port-mapping-ecs/
+
+#### EC2의 32768-65535 포트를 허용하라.
+https://stackoverflow.com/questions/39832433/dynamic-ports-and-aws-applocation-load-balancer-and-ecs
+
+### travis ci
+https://github.com/silinternational/ecs-deploy
