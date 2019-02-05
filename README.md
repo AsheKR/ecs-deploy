@@ -166,7 +166,6 @@ FULL PATH 를 사용하여 travis를 실행하도록 하자.
 .secrets/
 secrets.tar
 
-...
 ```
 
 6. `.travis.yml`의 before_install에 `secrets.tar.enc`관련 명령어가 추가된 것을 확인
